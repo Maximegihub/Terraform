@@ -1,31 +1,29 @@
 terraform {
   required_providers {
     proxmox = {
-      source  = "Telmate/proxmox"
-      version = "2.9.11"
+      source  = "Telmate/proxmox"  # Choisir le plugin adéquatte#
+      version = "2.9.11"            # Sélectionner la dernière version#
     }
   }
 }
 
 provider "proxmox" {
-  pm_tls_insecure = true
-  pm_api_url      = "http://10.27.0.100:8006/api2/json"
-  pm_api_token_id         = "MaximeL@pve!terraform"
-  pm_api_token_secret = "fd0f409e-f367-41c0-81d6-bebea5931381"
+  pm_tls_insecure = true                                #skipé la vérification TLS 
+  pm_api_url      = "http://Serveur_cible/api2/json"    # Serveur cible#
+  pm_api_token_id         = "id du token utilisé"
+  pm_api_token_secret = "token de l'utilisateur"
 }
 
-resource "proxmox_vm_qemu" "maximel2" {
-  name = "test"
-  clone = "maximel2"
+resource "proxmox_vm_qemu" "machine cible qui servira a etre cloner" {
+  name = "nommer votre machine"
+  clone = "clone source"
   os_type = "cloud-init"
-  target_node = "Grp1-Srv1"
+  target_node = "Nom du noeud sur votre serveur"
   cpu = "host"
   memory  = 2048
   cores   = 2
   sockets = 1
   scsihw = "virtio-scsi-single"
-
- #os_type = "l26"
 
   network {
     model = "virtio"
@@ -33,10 +31,8 @@ resource "proxmox_vm_qemu" "maximel2" {
   }
 
   disk {
-    storage   = "local"
+    storage   = "chemin ou est stocké le disque "
     size      = "10G"
     type      = "scsi"
-    #clone     = "template:~/terraformimage/debian-11-genericcloud-amd64"
-    #full_clone = true
   }
 }
